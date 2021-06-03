@@ -32,7 +32,7 @@ dependencies {
 - `UserDetailsService` 빈 생성:  `user`라는 username과 콘솔에 기록되는 랜덤하게 생성되는 암호를 가지고 있다.
 - 모든 request마다 Servlet container의 springSecurityFilterChain이라는 이름을 가진 빈의 Filter를 등록한다.
 
-## Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행하고 있다. 기능 요약은 다음과 같다.
+### Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행하고 있다. 기능 요약은 다음과 같다.
 - 애플리케이션 내의 상호작용을 위해서 인증된 유저를 요구한다.
 - 기본 로그인 폼을 제공한다.
 - `user`라는 username과 콘솔에 기록되는 패스워드로 로그인해라.
