@@ -32,7 +32,9 @@ dependencies {
 - `UserDetailsService` 빈 생성:  `user`라는 username과 콘솔에 기록되는 랜덤하게 생성되는 암호를 가지고 있다.
 - 모든 request마다 Servlet container의 springSecurityFilterChain이라는 이름을 가진 빈의 Filter를 등록한다.
 
-### Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행하고 있다. 기능 요약은 다음과 같다.
+
+Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행하고 있다. 
+### 기능 요약은 다음과 같다.
 - 애플리케이션 내의 상호작용을 위해서 인증된 유저를 요구한다.
 - 기본 로그인 폼을 제공한다.
 - `user`라는 username과 콘솔에 기록되는 패스워드로 로그인해라.
@@ -42,3 +44,11 @@ dependencies {
 - [Session Fixation](https://en.wikipedia.org/wiki/Session_fixation) 보호
 - Security 헤더 통합
 
+
+
+![filterChaine](/docs/images/filterchain.png)
+
+클라이언트가 애플리케이션에 요청을 보내면, 컨테이너는 `FilterChain`을 만들어준다. (`FilterChain`에는 요청 URI에 따른 `HttpServletRequest`를 처리할 `Filter`들과 `Servlet`을 포함하고 있다. )
+MVC 애플리케이션에서는 Servlet은 `DispatcherServlet`의 인스턴스다. 하나의 Servlet은 각 하나의 `HttpServletRequest`와 `HttpServletResponse`를 다룰 수 있다. 그러나 Filter는 하나 이상이 다음과 같은 용도로 사용할 수 있다.
+- 또다른 `Filter`들과 `Servlet`을 주입받는 것으로부터 막아준다. 이 경우에 `Filter`는 HttpServletResponse라고 쓰인다.
+- Filter들과 Servlet에 의해 사용되는 `HttpServletRequest` 또는 `HttpServletResponse`를 수정한다.
