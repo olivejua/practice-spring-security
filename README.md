@@ -42,8 +42,18 @@ Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행
 - 유저를 로그아웃 시켜준다.
 - [CSRF attack](https://en.wikipedia.org/wiki/Cross-site_request_forgery) 예방
 - [Session Fixation](https://en.wikipedia.org/wiki/Session_fixation) 보호
-- Security 헤더 통합
-
+- Security header integration
+    - 보안요청을 위한 [HTTP Strict Transport Security](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security)
+    - X-Content-Type-Options integration
+    - Cache Control
+    - X-XSS-Protection integration
+    - X-Frame-Options integration 
+- 다음 Servlet API Methods와 통합
+    - [HttpServletRequest#getRemoteUser()](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#getRemoteUser())
+    - [HttpServletRequest.html#getUserPrincipal()](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#getUserPrincipal())
+    - [HttpServletRequest.html#isUserInRole(java.lang.String)](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String))
+    - [HttpServletRequest.html#login(java.lang.String, java.lang.String)](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#login(java.lang.String,%20java.lang.String))
+    - [HttpServletRequest.html#logout()](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#logout())
 
 ### A Review of `Filter`s
 
@@ -57,5 +67,11 @@ MVC 애플리케이션에서는 Servlet은 `DispatcherServlet`의 인스턴스�
 
 ### DelegatingFilterProxy
 
-Spring은 `DelegatingFilterProxy`라는 이름의 `Filter` 구현체를 제공한다. `DelegatingFilterProxy`는 서블릿 컨테이너의 lifecycle와 스프링의 `ApplicationContext` 사이를 연결해주는 것을 허용한다.
-서블릿 컨테이너는 
+Spring은 `DelegatingFilterProxy`라는 이름의 `Filter` 구현체를 제공한다. `DelegatingFilterProxy`는 서블릿 컨테이너의 lifecycle와 스프링의 `ApplicationContext` 사이를 연결시켜준다.
+서블릿 컨테이너는 자체 표준을 사용하여 `Filter`를 등록할 수 있지만 스프링에 정의된 Beans은 인식하지 못한다. DeletegatingFilterProxy는 표준 서블릿 컨테이너 매커니즘을 통해 등록할 수 있지만 모든 작업은 `Filter`를 구현하는 스프링 빈에 위임한다.
+
+![delegatingfilterproxy](/docs/images/delegatingfilterproxy.png)
+
+`DelegatingFilterProxy`의 또다른 장점은 Filter bean 인스턴스들을 찾는 것을 지연시킬 수 있다. 이게 중요한 이점이 되는 이유는 컨테이너는 실행되기 전에 모든 `Filter` 인스턴스들을 등록해야한다.
+그런데 Spring은 보통 스프링 빈을 로드시키는데 ContextLoaderListener를 사용한다.  
+
