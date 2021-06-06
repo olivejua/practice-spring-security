@@ -55,7 +55,7 @@ Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행
     - [HttpServletRequest.html#login(java.lang.String, java.lang.String)](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#login(java.lang.String,%20java.lang.String))
     - [HttpServletRequest.html#logout()](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#logout())
 
-### A Review of `Filter`s
+## A Review of `Filter`s
 
 ![filterChaine](/docs/images/filterchain.png)
 
@@ -65,13 +65,28 @@ MVC 애플리케이션에서는 Servlet은 `DispatcherServlet`의 인스턴스�
 - Filter들과 Servlet에 의해 사용되는 `HttpServletRequest` 또는 `HttpServletResponse`를 수정한다.
 
 
-### DelegatingFilterProxy
+## DelegatingFilterProxy
 
 Spring은 `DelegatingFilterProxy`라는 이름의 `Filter` 구현체를 제공한다. `DelegatingFilterProxy`는 서블릿 컨테이너의 lifecycle와 스프링의 `ApplicationContext` 사이를 연결시켜준다.
-서블릿 컨테이너는 자체 표준을 사용하여 `Filter`를 등록할 수 있지만 스프링에 정의된 Beans은 인식하지 못한다. DeletegatingFilterProxy는 표준 서블릿 컨테이너 매커니즘을 통해 등록할 수 있지만 모든 작업은 `Filter`를 구현하는 스프링 빈에 위임한다.
+서블릿 컨테이너는 자체 표준을 사용하여 `Filter`를 등록할 수 있지만 스프링에 정의된 Beans은 인식하지 못한다. 하지만 DeletegatingFilterProxy는 표준 서블릿 컨테이너 매커니즘을 통해 등록될 수 있다. 그리고 이름대로 모든 작업은 `Filter`를 구현하는 스프링 빈에 위임한다.
 
 ![delegatingfilterproxy](/docs/images/delegatingfilterproxy.png)
 
 `DelegatingFilterProxy`의 또다른 장점은 Filter bean 인스턴스들을 찾는 것을 지연시킬 수 있다. 이게 중요한 이점이 되는 이유는 컨테이너는 실행되기 전에 모든 `Filter` 인스턴스들을 등록해야한다.
-그런데 Spring은 보통 스프링 빈을 로드시키는데 ContextLoaderListener를 사용한다.  
+그런데 Spring은 보통 스프링 빈을 로드시키는데 ContextLoaderListener를 사용하는데 `Filter` 인스턴스이 등록되어야할 때까지 수행되지 않기 때문이다.
 
+## FilterChainProxy
+Spring Security 의 서블릿 지원은 `FilterChainProxy`가 포함된다. `FilterChainProxy`는 Spring Security가 제공하는 특별한 `Filter`이다. `FilterChainProxy`는 `SecurityFilterChain`을 통해 많은 Filter 인스턴스들에게 위임해줄 수 있다.
+`FilterChainProxy`는 빈이기 때문에 `DelegatingFilterProxy`에 감싸져있다.
+
+![filterchainproxy](/docs/images/filterchainproxy.png) 
+
+## SecurityFilterChain
+`SpringFilterChain`은 `FilterChainProxy`에 의해 사용되어진다. 
+`SpringFilterChain`는 request에 따라 주입되어야 하는 Spring Security `Filter`를 결정하는데 사용된다. 
+
+![securityfilterchain](/docs/images/securityfilterchain.png)
+
+`SecurityFilterChain`에 `Security Filters`는 대부분 Bean이다. 그러나 이 빈들은 `DelegatingFilterProxy`대신에 `FilterChainProxy`에 등록되어진다. 
+`FilterChainProxy`를 서블릿 컨테이너나 DelegatingFilterProxy에 직접 등록할 때 수많은 이점들이 있다. 먼저, 모든 Spring Security Servlet support의 시작포인트를 제공한다.
+그 이유인 즉슨,   

@@ -18,6 +18,6 @@ public class SecurityConfig implements Filter{
         // For the example in delegatingFilterProxy delegate is an instance of Bean Filter0
         Filter delegate = getFilterBean(someBeanName);
         //Delegate work to the Spring Bean
-        chain.doFilter(request, response); // invoke the rest of the application
+        delegate.doFilter(request, response); // invoke the rest of the application
     }
 }
