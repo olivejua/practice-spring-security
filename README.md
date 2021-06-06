@@ -45,6 +45,7 @@ Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행
 - Security 헤더 통합
 
 
+### A Review of `Filter`s
 
 ![filterChaine](/docs/images/filterchain.png)
 
@@ -52,3 +53,9 @@ Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행
 MVC 애플리케이션에서는 Servlet은 `DispatcherServlet`의 인스턴스다. 하나의 Servlet은 각 하나의 `HttpServletRequest`와 `HttpServletResponse`를 다룰 수 있다. 그러나 Filter는 하나 이상이 다음과 같은 용도로 사용할 수 있다.
 - 또다른 `Filter`들과 `Servlet`을 주입받는 것으로부터 막아준다. 이 경우에 `Filter`는 HttpServletResponse라고 쓰인다.
 - Filter들과 Servlet에 의해 사용되는 `HttpServletRequest` 또는 `HttpServletResponse`를 수정한다.
+
+
+### DelegatingFilterProxy
+
+Spring은 `DelegatingFilterProxy`라는 이름의 `Filter` 구현체를 제공한다. `DelegatingFilterProxy`는 서블릿 컨테이너의 lifecycle와 스프링의 `ApplicationContext` 사이를 연결해주는 것을 허용한다.
+서블릿 컨테이너는 
