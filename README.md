@@ -49,6 +49,8 @@ Spring Boot는 많은 설정이 되어 있지는 않지만, 많은 일을 수행
 ![filterChaine](/docs/images/filterchain.png)
 
 클라이언트가 애플리케이션에 요청을 보내면, 컨테이너는 `FilterChain`을 만들어준다. (`FilterChain`에는 요청 URI에 따른 `HttpServletRequest`를 처리할 `Filter`들과 `Servlet`을 포함하고 있다. )
+
 MVC 애플리케이션에서는 Servlet은 `DispatcherServlet`의 인스턴스다. 하나의 Servlet은 각 하나의 `HttpServletRequest`와 `HttpServletResponse`를 다룰 수 있다. 그러나 Filter는 하나 이상이 다음과 같은 용도로 사용할 수 있다.
 - 또다른 `Filter`들과 `Servlet`을 주입받는 것으로부터 막아준다. 이 경우에 `Filter`는 HttpServletResponse라고 쓰인다.
 - Filter들과 Servlet에 의해 사용되는 `HttpServletRequest` 또는 `HttpServletResponse`를 수정한다.
+
