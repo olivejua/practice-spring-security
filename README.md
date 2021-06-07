@@ -89,4 +89,21 @@ Spring Security 의 서블릿 지원은 `FilterChainProxy`가 포함된다. `Fil
 
 `SecurityFilterChain`에 `Security Filters`는 대부분 Bean이다. 그러나 이 빈들은 `DelegatingFilterProxy`대신에 `FilterChainProxy`에 등록되어진다. 
 `FilterChainProxy`를 서블릿 컨테이너나 DelegatingFilterProxy에 직접 등록할 때 수많은 이점들이 있다. 먼저, 모든 Spring Security Servlet support의 시작포인트를 제공한다.
-그 이유인 즉슨,   
+그 이유인 즉슨, 당신이 Spring Security's Servlet support에 문제해결 시도를 했을 때 `FilterChainProxy` 안에 디버그 포인트를 추가하기에 아주 좋은 지점이다. 왜냐하면 FilterChainProxy가 Springg Security Servlet support의 시작점이기 때문이다.
+
+두번째, `FilterChainProxy`는 Spring Security 사용의 중심이 되기 때문에, 선택적으로 보여지지 않는 태스크들을 수행할 수 있다. 
+예를 들어, Security context를 메모리 누출을 피하기 위해 청소한다. ㅓ또한 Spring Securityd의 HttpFirewall을 특정 타입의 공격을 방어하기 위해 지원한다.
+
+게다가, `SecurityFilterChain`이 주입받아야하는 시점을 더욱 유연하게 결정할 수 있다. Servlet container에서는 `Filter`가 URL만으로 판단되어 주입을 받는다. 하지만 `FilterChainProxy`는 `HTTPServletRequest`를 고려하여 주입을 판단할 수 있다.
+
+사실, `FilterChainProxy`는 어떤 `SecurityFilterChain`을 사용할지 결정하는데 사용한다. 우리의 애플리케이션의 다른 부분에 맞게 환경설정을 할 수 있다.
+
+
+
+
+#Authentication
+
+### ArchitectureComponent
+
+## SecurityContextHolder
+`SecurityContextHolder`는 Spring Security가 인증된 사용자의 상세정보들을 저장하는 곳이다. 
